@@ -16,6 +16,7 @@ func ApiKeyAuth() gin.HandlerFunc {
 		}
 		if c.Request.Header.Get("x-api-key") != os.Getenv("ApiKey") {
 			c.AbortWithStatus(http.StatusForbidden)
+			log.Println("auth failed")
 		}
 		c.Next()
 	}
