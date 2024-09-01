@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 
@@ -11,8 +12,9 @@ func ApiKeyAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if c.Request.Header.Get("x-api-key") == "" {
 			c.AbortWithStatus(http.StatusForbidden)
+			log.Println("auth failed")
 		}
-		if c.Request.Header.Get("x-api-key") != os.Getenv("API-Key") {
+		if c.Request.Header.Get("x-api-key") != os.Getenv("ApiKey") {
 			c.AbortWithStatus(http.StatusForbidden)
 		}
 		c.Next()
