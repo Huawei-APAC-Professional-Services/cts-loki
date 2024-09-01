@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -16,6 +17,15 @@ func main() {
 	router := gin.Default()
 	router.Use(ApiKeyAuth())
 	router.GET("/", func(c *gin.Context) { c.JSON(200, gin.H{"Number": 10}) })
+	router.POST("/", func(c *gin.Context) {
+		data, err := io.ReadAll(c.Request.Body)
+		if err != nil {
+			log.Println(err.Error())
+			c.JSON(http.StatusOK, nil)
+		}
+		log.Println(string(data))
+		c.JSON(http.StatusOK, nil)
+	})
 	srv := &http.Server{
 		Addr:    ":80",
 		Handler: router.Handler(),
